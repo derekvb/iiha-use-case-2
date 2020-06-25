@@ -80,7 +80,7 @@
         <div class="child right">
             <div class="sidebar">
                 <h2 class='attribute_group_title'>Planinformatie</h2>
-                    <p class='attribute_title'>Identicatie</p>
+                    <p class='attribute_title'>Identificatie</p>
                     <p id='f2'></p>
                     <p class='attribute_title'>Naam</p>
                     <p id='f3'></p>
@@ -266,7 +266,7 @@
                     mouseout: resetHighlight,
                     click: selectFeature
                 });
-                layer.bindTooltip(feature.properties.identifica);
+                layer.bindTooltip(feature.properties.naam);
             }
 
             var geojson = L.geoJson(null,
