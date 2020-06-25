@@ -1,0 +1,37 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
+    color: rgb(37, 108, 195);
+}
+
+h2 {
+    font-weight: 300;
+}
+
+.parent {
+    display: flex;
+    height: 300px; /* Or whatever */
+  }
+  
+  .child {
+    height: 100vh; /* Or whatever */
+    margin: auto;  /* Magic! */
+  }
+
+  .middle {
+      width: 100vw;
+  }
+
+  .left {
+      width: 400px;
+  }
+
+  .right {
+      width: 400px;
+  }
+
+  .attribute_title {
+      font-weight: bold;
+  }

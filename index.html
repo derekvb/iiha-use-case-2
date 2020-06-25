@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>A basic map with Leaflet</title>
+
+    <!--add Leaflet CSS-->
+    <link rel="stylesheet" href="style.css" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
+        integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+        crossorigin="" />
+
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.1.1/chroma.min.js"></script>
+
+
+    <!--our own style rules-->
+
+    <style type="text/css">
+        body,
+        html {
+            height: 90%;
+        }
+
+        #map-container {
+            height: 100%;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Use Case 2: Ruimtelijke Adaptatie</h1>
+    <!--The div in which the map will be created-->
+    <div class="parent">
+        <div class="child left">
+            <button onclick="polySelect('NL.IMRO.0530.BPMolenstraat2009-VO02')">NL.IMRO.0530.BPMolenstraat2009-VO02</button>
+            <br>
+            <button onclick="polySelect('NL.IMRO.0530.BPMolenstraat2009-ow01')">NL.IMRO.0530.BPMolenstraat2009-ow01</button>
+            <br>
+            <button onclick="polySelect('NL.IMRO.0530.BPHeliushaven-VO01')">NL.IMRO.0530.BPHeliushaven-VO01</button>
+            <br>
+            <button onclick="polySelect('NL.IMRO.0530.BPHeliushaven-ow01')">NL.IMRO.0530.BPHeliushaven-ow01            </button>
+            <br>
+            <button onclick="polySelect('NL.IMRO.0530.BPKickersbloem2012-vo01')">NL.IMRO.0530.BPKickersbloem2012-vo01</button>
+            <br>
+            <button onclick="polySelect('NL.IMRO.0530.BPBuitengebied2011-vo01')">NL.IMRO.0530.BPBuitengebied2011-vo01</button>
+            <br>
+            <button onclick="polySelect('NL.IMRO.0530.BPRavenseHoek2011-VO01')">NL.IMRO.0530.BPRavenseHoek2011-VO01</button>
+            <br>
+            <button onclick="polySelect('NL.IMRO.0530.BPDeVesting2011-ON01')">NL.IMRO.0530.BPDeVesting2011-ON01</button>
+            <br>
+            <button onclick="polySelect('NL.IMRO.0530.BPNieuwenhoorn2011-VO01')">NL.IMRO.0530.BPNieuwenhoorn2011-VO01</button>
+            <br>
+            <button onclick="polySelect('NL.IMRO.0530.BPRecreatie2011-ON01')">NL.IMRO.0530.BPRecreatie2011-ON01</button>
+            <br>
+            <button onclick="polySelect('NL.IMRO.0530.BPKooistee2009-vo01')">NL.IMRO.0530.BPKooistee2009-vo01</button>
+            <br>
+            <button onclick="polySelect('NL.IMRO.0530.BP30Molshoek2010-ow01')">NL.IMRO.0530.BP30Molshoek2010-ow01</button>
+            <br>
+            <button onclick="polySelect('NL.IMRO.1930.WPZLDKVNFASE1B-1001')">NL.IMRO.1930.WPZLDKVNFASE1B-1001</button>
+            <br>
+            <button onclick="polySelect('NL.IMRO.0614.1209bpHoofdwg2017-0010')">NL.IMRO.0614.1209bpHoofdwg2017-0010</button>
+            <br>
+            <button onclick="polySelect('NL.IMRO.0614.1210waboStryp48-0010')">NL.IMRO.0614.1210waboStryp48-0010</button>
+            <br>
+            <button onclick="polySelect('NL.IMRO.0501.VP1eherziening-0120')">NL.IMRO.0501.VP1eherziening-0120</button>
+            <br>
+
+        </div>
+        <div class="child middle">
+            <div id="map-container"></div>
+        </div>
+        <div class="child right">
+            <div class="sidebar">
+                <h2 class='attribute_group_title'>Planinformatie</h2>
+                    <p class='attribute_title'>Identicatie</p>
+                    <p id='f2'></p>
+                    <p class='attribute_title'>Naam</p>
+                    <p id='f3'></p>
+                    <p class='attribute_title'>Datum</p>
+                    <p id='f1'></p>
+                    <p class='attribute_title'>Verwijzing</p>
+                    <p id='f8'></p>
+                    <p class='attribute_title'>Type plan</p>
+                    <p id='f7'></p>
+                    <p class='attribute_title'>Planstatus</p>
+                    <p id='f6'></p>
+                    <p class='attribute_title'>Naam overheid</p>
+                    <p id='f5'></p>
+                <h2 class='attribute_group_title'>Overstromingsinformatie</h2>
+                <p class='attribute_title'>Maximale waterdiepte max</p>
+                <p id='f11'></p>
+                <p class='attribute_title'>Maximale plaatsgebonden overstromingskans</p>
+                <p id='f9'></p>
+                <p class='attribute_title'>Maximalewaterdieptes</p>
+                <p id='f13'></p>
+                    <!-- <p class='attribute_title'>Beleidsmve</p>
+                    <p id='f4'></p>
+
+                    <p class='attribute_title'>Beschrijvi</p>
+                    <p id='f10'></p>
+
+                    <p class='attribute_title'>Scenarios</p>
+                    <p id='f12'></p>
+
+                    <p class='attribute_title'>Uuids</p>
+                    <p id='f14'></p>
+                    <p class='attribute_title'>Traject_id</p>
+                    <p id='f15'></p>
+                    <p class='attribute_title'>Norm_sign</p>
+                    <p id='f16'></p>
+                    <p class='attribute_title'>Norm_onder</p>
+                    <p id='f17'></p> -->
+                
+
+            </div>
+        </div>
+
+
+        <!--load leaflet.js-->
+
+        <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
+            integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+            crossorigin=""></script>
+
+
+
+        <!--code we need to use a different projection-->
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.4/proj4.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.min.js"></script>
+
+
+
+        <!--our own code to create the map-->
+
+        <script>
+
+            //define the custom projection tileset (Amersfoort/RD)
+
+            var RD = new L.Proj.CRS('EPSG:28992', '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +towgs84=565.2369,50.0087,465.658,-0.406857330322398,0.350732676542563,-1.8703473836068,4.0812 +no_defs', {
+                resolutions: [3440.640, 1720.320, 860.160, 430.080, 215.040, 107.520, 53.760, 26.880, 13.440, 6.720, 3.360, 1.680, 0.840, 0.420, 0.210],
+                bounds: L.bounds([-285401.92, 22598.08], [595401.9199999999, 903401.9199999999]),
+                origin: [-285401.92, 22598.08]
+
+            }
+
+            );
+
+            //initialize the map with our coordinate reference system
+
+            let map = L.map('map-container', {
+                crs: RD
+            });
+
+            //map view still gets set with Latitude/Longitude,
+
+            //but the zoomlevel is now different (it uses the resolutions defined in our projection tileset above)
+
+            map.setView([51.838, 4.098], 7);
+
+            //add background layer in custom projection
+
+            let bglayer_BRTAchtergrondkaart = new L.TileLayer('http://geodata.nationaalgeoregister.nl/tiles/service/tms/1.0.0/brtachtergrondkaartwater/EPSG:28992/{z}/{x}/{y}.png', {
+                minZoom: 0,
+                maxZoom: 13,
+                tms: true,
+                attribution: 'Map data: <a href="http://www.kadaster.nl">Kadaster</a>'
+
+            });
+
+            bglayer_BRTAchtergrondkaart.addTo(map)
+
+            let layer_dijktrajecten = new L.TileLayer.WMS('https://waterveiligheidsportaal.nl/geoserver/spa/ows?', {
+                layers: 'nbpw',
+                transparent: true,
+                format: 'image/png'
+            }).addTo(map);
+
+            // let layer_ruimtelijkeplannen = new L.TileLayer.WMS('https://maps1.project.lizard.net/geoserver/p_iiha_lizard/wfs', {
+            //     layers: 'p_iiha_lizard:v0101_iiha_ruimte_plannen_dkr20_01012021',
+            //     transparent: true,
+            //     format: 'image/png'
+            // }).addTo(map);
+
+            // let layer_ruimtelijkeplannen = new L.TileLayer.WFS('https://maps1.project.lizard.net/geoserver/p_iiha_lizard/wfs', {
+            //     layers: 'p_iiha_lizard:v0101_iiha_ruimte_plannen_dkr20_01012021',
+            //     transparent: true,
+            //     format: 'image/png'
+            // }).addTo(map);
+
+            function highlightFeature(e) {
+                var layer = e.target;
+                layer.setStyle({
+                    weight: 2,
+                    color: '#333',
+                });
+                if (!L.Browser.ie && !L.Browser.opera) {
+                    layer.bringToFront();
+                }
+            }
+
+            function resetHighlight(e) {
+                geojson.resetStyle(e.target);
+            }
+
+            function zoomToFeature(e) {
+                map.fitBounds(e.target.getBounds());
+            }
+
+            function displayAttributes(e) {
+                var field1 = document.getElementById('f1');
+                field1.innerHTML = e.target.feature.properties.datum;
+                var field2 = document.getElementById('f2');
+                field2.innerHTML = e.target.feature.properties.identifica;
+                var field3 = document.getElementById('f3');
+                field3.innerHTML = e.target.feature.properties.naam;
+                // var field4 = document.getElementById('f4');
+                // field4.innerHTML = e.target.feature.properties.beleidsmve;
+                var field5 = document.getElementById('f5');
+                field5.innerHTML = e.target.feature.properties.naamoverhe;
+                var field6 = document.getElementById('f6');
+                field6.innerHTML = e.target.feature.properties.planstatus;
+                var field7 = document.getElementById('f7');
+                field7.innerHTML = e.target.feature.properties.typeplan;
+                var field8 = document.getElementById('f8');
+                field8.innerHTML = e.target.feature.properties.verwijzing;
+                var field9 = document.getElementById('f9');
+                field9.innerHTML = e.target.feature.properties.maximalepl;
+                // var field10 = document.getElementById('f10');
+                // field10.innerHTML = e.target.feature.properties.beschrijvi;
+                var field11 = document.getElementById('f11');
+                field11.innerHTML = e.target.feature.properties.maximalewa;
+                // var field12 = document.getElementById('f12');
+                // field12.innerHTML = e.target.feature.properties.scenarios;
+                var field13 = document.getElementById('f13');
+                field13.innerHTML = e.target.feature.properties.maximale_1;
+                // var field14 = document.getElementById('f14');
+                // field14.innerHTML = e.target.feature.properties.uuids;
+                // var field15 = document.getElementById('f15');
+                // field15.innerHTML = e.target.feature.properties.traject_id;
+                // var field16 = document.getElementById('f16');
+                // field16.innerHTML = e.target.feature.properties.norm_sign;
+                // var field17 = document.getElementById('f17');
+                // field17.innerHTML = e.target.feature.properties.norm_onder;
+            }
+
+            function selectFeature(e) {
+                zoomToFeature(e);
+                displayAttributes(e);
+            }
+
+            function onEachFeature(feature, layer) {
+                layer._leaflet_id = feature.properties.identifica;
+                console.log(layer._leaflet_id);
+                layer.on({
+                    mouseover: highlightFeature,
+                    mouseout: resetHighlight,
+                    click: selectFeature
+                });
+                layer.bindTooltip(feature.properties.identifica);
+            }
+
+            var geojson = L.geoJson(null,
+                {
+                    style: getStyle,
+                    onEachFeature: onEachFeature
+                }
+            ).addTo(map);
+
+            var url = 'https://maps1.project.lizard.net/geoserver/p_iiha_lizard/wfs?';
+
+            // These parameters are identical for all GeoJSON-requests:
+            var params = 'service=WFS&version=2.0.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&';
+
+            // These parameters have to be modified per GeoJSON-request
+            params += 'typeName=p_iiha_lizard:v0101_iiha_ruimte_plannen_dkr20_01012021&';
+
+            // Ajax without jQuery ;-)
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', encodeURI(url + params));
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    geojson.addData(JSON.parse(xhr.responseText));
+                } else {
+                    alert('Request failed.  Returned status of ' + xhr.status);
+                }
+            };
+            xhr.send();
+
+
+            function getStyle(features) {
+                var status = features.properties.planstatus;
+                var colour;
+                if (status == "concept") {
+                    colour = '#f00'
+                } else if (status == 'voorontwerp') {
+                    colour = '#0f0'
+                } else {
+                    colour = '#00f'
+                }
+
+                return {
+                    color: '#fff',
+                    fillColor: getColour(status),
+                    weight: 0.8,
+                    opacity: 1,
+                    fillOpacity: 0.5
+                }
+            }
+
+            function getColour(d) {
+                var colour;
+                if (d == "concept") {
+                    colour = '#f00'
+                } else if (d == 'voorontwerp') {
+                    colour = '#0f0'
+                } else {
+                    colour = '#00f'
+                }
+                return colour;
+            }
+            
+
+// fire off click event and zoom to polygon  
+function polySelect(a){
+        map._layers[a].fire('click');  // 'clicks' on state name from search
+}
+
+
+        </script>
+
+</body>
+
+</html>
